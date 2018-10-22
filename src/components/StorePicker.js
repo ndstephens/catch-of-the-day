@@ -1,7 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { getFunName } from '../helpers'
 
 class StorePicker extends React.Component {
+  static propTypes = {
+    history: PropTypes.object,
+  }
+
   myInput = React.createRef()
 
   // create as a property set to an arrow function to help bind 'this' to the instance of the class.  using a method will unbind 'this' from the instance.

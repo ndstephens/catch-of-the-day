@@ -1,6 +1,19 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class EditFishForm extends Component {
+  static propTypes = {
+    fish: PropTypes.shape({
+      image: PropTypes.string,
+      name: PropTypes.string,
+      desc: PropTypes.string,
+      status: PropTypes.string,
+      price: PropTypes.number,
+    }),
+    index: PropTypes.string,
+    updateFish: PropTypes.func,
+  }
+
   handleChange = e => {
     // Update that fish
     // 1. Take a copy of the current fish (object spread), use computed properties to use the 'name' attribute of the currentTarget (field being clicked on) which will match equivalent object key whose value you're looking to mutate, replace its value with the value the user changed in the UI
