@@ -104,3 +104,4 @@ Temporary Items
 .idea
 *.zip
 notes.md
+build/
