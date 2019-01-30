@@ -2,21 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 class EditFishForm extends Component {
-  static propTypes = {
-    fish: PropTypes.shape({
-      image: PropTypes.string,
-      name: PropTypes.string,
-      desc: PropTypes.string,
-      status: PropTypes.string,
-      price: PropTypes.number,
-    }),
-    index: PropTypes.string,
-    updateFish: PropTypes.func,
-  }
-
   handleChange = e => {
-    // Update that fish
-    // 1. Take a copy of the current fish (object spread), use computed properties to use the 'name' attribute of the currentTarget (field being clicked on) which will match equivalent object key whose value you're looking to mutate, replace its value with the value the user changed in the UI
+    // Take a copy of the current fish (object spread), use computed properties to use the 'name' attribute of the currentTarget (field being clicked on) which will match equivalent object key whose value you're looking to update, replace its value with the value the user changed in the UI
     const updatedFish = {
       ...this.props.fish,
       [e.currentTarget.name]: e.currentTarget.value,
@@ -26,6 +13,7 @@ class EditFishForm extends Component {
 
   render() {
     return (
+      //? Does NOT need to be a form since we aren't submitting it.  All changes are synced to state (and Firebase) on every 'change/keyup' event
       <div className="fish-edit">
         <input
           type="text"
@@ -65,6 +53,18 @@ class EditFishForm extends Component {
       </div>
     )
   }
+}
+
+EditFishForm.propTypes = {
+  fish: PropTypes.shape({
+    image: PropTypes.string,
+    name: PropTypes.string,
+    desc: PropTypes.string,
+    status: PropTypes.string,
+    price: PropTypes.number,
+  }),
+  index: PropTypes.string,
+  updateFish: PropTypes.func,
 }
 
 export default EditFishForm

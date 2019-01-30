@@ -1,23 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import { formatPrice } from '../helpers'
 
 class Fish extends Component {
-  static propTypes = {
-    addToOrder: PropTypes.func,
-    index: PropTypes.string,
-    details: PropTypes.shape({
-      image: PropTypes.string,
-      name: PropTypes.string,
-      desc: PropTypes.string,
-      status: PropTypes.string,
-      price: PropTypes.number,
-    }),
-  }
-
   render() {
-    const { image, name, price, desc, status } = this.props.details
+    const { image, name, price, desc, status } = this.props.fish
     const isAvailable = status === 'available'
+
     return (
       <li className="menu-fish">
         <img src={image} alt={name} />
@@ -35,6 +25,18 @@ class Fish extends Component {
       </li>
     )
   }
+}
+
+Fish.propTypes = {
+  addToOrder: PropTypes.func,
+  index: PropTypes.string,
+  fish: PropTypes.shape({
+    image: PropTypes.string,
+    name: PropTypes.string,
+    desc: PropTypes.string,
+    status: PropTypes.string,
+    price: PropTypes.number,
+  }),
 }
 
 export default Fish

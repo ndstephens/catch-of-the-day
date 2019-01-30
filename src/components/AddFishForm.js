@@ -8,27 +8,27 @@ class AddFishForm extends Component {
   descRef = React.createRef()
   imageRef = React.createRef()
 
-  static propTypes = {
-    addFish: PropTypes.func,
-  }
-
   createFish = e => {
     // 1. stop form from submitting
     e.preventDefault()
+
     const fish = {
       name: this.nameRef.value.value,
-      price: parseFloat(this.priceRef.value.value),
+      price: parseInt(this.priceRef.value.value, 10),
       status: this.statusRef.value.value,
       desc: this.descRef.value.value,
       image: this.imageRef.value.value,
     }
     // App -> Inventory -> here
     this.props.addFish(fish)
+
+    //* Clear all values in the form's elements ('e.currentTarget' is the form element itself since the submit event ('e') came from the form element, and all form elements have a reset() method on them)
     e.currentTarget.reset()
   }
 
   render() {
     return (
+      //? Must be a form so that we can 'submit' it
       <form className="fish-edit" onSubmit={this.createFish}>
         <input name="name" ref={this.nameRef} type="text" placeholder="Name" />
         <input
@@ -52,6 +52,10 @@ class AddFishForm extends Component {
       </form>
     )
   }
+}
+
+AddFishForm.propTypes = {
+  addFish: PropTypes.func,
 }
 
 export default AddFishForm

@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { formatPrice } from '../helpers'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 
-class Order extends Component {
-  static propTypes = {
-    fishes: PropTypes.object,
-    order: PropTypes.object,
-    removeFromOrder: PropTypes.func,
-  }
+import { formatPrice } from '../helpers'
 
+class Order extends Component {
   renderOrder = key => {
     const fish = this.props.fishes[key]
     const count = this.props.order[key]
@@ -19,7 +14,9 @@ class Order extends Component {
       key,
       timeout: { enter: 500, exit: 500 },
     }
-    // Make sure fish are loaded before continuing
+
+    //* Make sure fish are loaded before continuing
+    //* 'this.props.fishes' come from 'fishes' in App's state, which is populated asynchronously from the Firebase database.  Therefore 'fish' will be 'undefined' until that data is received from Firebase.
     if (!fish) return null
 
     if (!isAvailable) {
@@ -31,6 +28,7 @@ class Order extends Component {
         </CSSTransition>
       )
     }
+
     return (
       <CSSTransition {...transitionOptions}>
         <li key={key}>
@@ -44,8 +42,7 @@ class Order extends Component {
                 <span>{count}</span>
               </CSSTransition>
             </TransitionGroup>
-            lbs {fish.name}
-            {formatPrice(count * fish.price)}
+            lbs {fish.name} {formatPrice(count * fish.price)}{' '}
             <button onClick={() => this.props.removeFromOrder(key)}>
               &times;
             </button>
@@ -79,6 +76,12 @@ class Order extends Component {
       </div>
     )
   }
+}
+
+Order.propTypes = {
+  fishes: PropTypes.object,
+  order: PropTypes.object,
+  removeFromOrder: PropTypes.func,
 }
 
 export default Order

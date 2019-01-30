@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Header = props => (
+const Header = ({ tagline }) => (
   <header className="top">
     <h1>
       Catch
@@ -12,7 +12,7 @@ const Header = props => (
       Day
     </h1>
     <h3 className="tagline">
-      <span>{props.tagline}</span>
+      <span>{tagline}</span>
     </h3>
   </header>
 )

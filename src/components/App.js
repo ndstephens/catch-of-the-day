@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import Header from './Header'
+import Fish from './Fish'
 import Order from './Order'
 import Inventory from './Inventory'
-import sampleFishes from '../sample-fishes'
-import Fish from './Fish'
+
 import base from '../base'
+import sampleFishes from '../sample-fishes'
 
 class App extends Component {
   state = {
@@ -13,62 +15,58 @@ class App extends Component {
     order: {},
   }
 
-  static propTypes = {
-    match: PropTypes.object,
-  }
+  //? LIFECYCLE METHODS
 
   componentDidMount() {
-    const { params } = this.props.match
-    // reinstate order state from localStorage
-    const localStorageRef = localStorage.getItem(params.storeId)
-    if (localStorageRef) {
-      this.setState({ order: JSON.parse(localStorageRef) })
-    }
-    // reinstate fishes state from Firebase database
-    this.ref = base.syncState(`${params.storeId}/fishes`, {
+    const { storeId } = this.props.match.params
+
+    //* reinstate FISHES STATE from Firebase database
+    //* ASYNCHRONOUS!!
+    this.firebaseRef = base.syncState(`${storeId}/fishes`, {
       context: this,
       state: 'fishes',
     })
+
+    //* reinstate ORDER STATE from localStorage
+    //* SYNCHRONOUS
+    const localStorageRef = localStorage.getItem(storeId)
+    if (localStorageRef) {
+      this.setState({ order: JSON.parse(localStorageRef) })
+    }
   }
 
   componentDidUpdate() {
+    //* every time state is modified, update order in localStorage (keyed with the store id)
     localStorage.setItem(
       this.props.match.params.storeId,
-      JSON.stringify(this.state.order)
+      JSON.stringify(this.state.order),
     )
   }
 
   componentWillUnmount() {
-    base.removeBinding(this.ref)
+    //* every time you leave the store (by going to a url other than 'baseURl/store/<store-name>') you un-mount this component
+    //* must remove the binding between this component's state and the Firebase database to prevent a memory leak
+    //* it will rebind and resync when you revisit the same store/url
+    base.removeBinding(this.firebaseRef)
   }
 
-  // Any function that needs to update state (and state, in this app, lives at the root of the app, App.js) needs to live in the same component where state lives (ie 'addFish' and 'loadSampleFishes')
+  //
+  //? CUSTOM FUNCTIONS THAT UPDATE STATE
+  //? Any function that updates a component's state must live in the same component where state lives
 
   addFish = fish => {
-    // 1. take a copy of the existing state (so as to not mutate the original)
-    const fishes = { ...this.state.fishes }
-    // 2. add our new fish to that 'fishes' object
-    fishes[`fish${Date.now()}`] = fish
-    // 3. set the new 'fishes' object state
-    this.setState({ fishes })
+    this.setState({
+      fishes: { ...this.state.fishes, [`fish${Date.now()}`]: fish },
+    })
   }
 
   updateFish = (key, updatedFish) => {
-    // 1. take a copy of the current state (of fishes)
-    const fishes = { ...this.state.fishes }
-    // 2. update that state
-    fishes[key] = updatedFish
-    // 3. set that to state
-    this.setState({ fishes })
+    this.setState({ fishes: { ...this.state.fishes, [key]: updatedFish } })
   }
 
   deleteFish = key => {
-    // 1. take a copy of state
-    const fishes = { ...this.state.fishes }
-    // 2. update the state (in order to delete an item in Firebase it must be set to 'null')
-    fishes[key] = null
-    // 3. update state
-    this.setState({ fishes })
+    //* in order to delete an item in Firebase it must be set to 'null'
+    this.setState({ fishes: { ...this.state.fishes, [key]: null } })
   }
 
   loadSampleFishes = () => {
@@ -87,7 +85,7 @@ class App extends Component {
   removeFromOrder = key => {
     // 1. take a copy of state
     const order = { ...this.state.order }
-    // 2. remove that item from order (here we can use 'delete' b/c it is stored in localStorage...unlike fishes which needed to be set to 'null' b/c that's what Firebase requires)
+    //* 2. remove that item from order (here we can use 'delete' b/c it is stored in localStorage...unlike fishes which needed to be set to 'null' b/c that's what Firebase requires)
     delete order[key]
     // 3. call 'setState' to update our state object
     this.setState({ order })
@@ -99,21 +97,24 @@ class App extends Component {
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
           <ul className="fishes">
+            {/*//* Must convert the object into an array for looping */}
             {Object.keys(this.state.fishes).map(key => (
               <Fish
                 key={key}
-                details={this.state.fishes[key]}
+                fish={this.state.fishes[key]}
                 addToOrder={this.addToOrder}
                 index={key}
               />
             ))}
           </ul>
         </div>
+
         <Order
           fishes={this.state.fishes}
           order={this.state.order}
           removeFromOrder={this.removeFromOrder}
         />
+
         <Inventory
           addFish={this.addFish}
           updateFish={this.updateFish}
@@ -125,6 +126,10 @@ class App extends Component {
       </div>
     )
   }
+}
+
+App.propTypes = {
+  match: PropTypes.object,
 }
 
 export default App

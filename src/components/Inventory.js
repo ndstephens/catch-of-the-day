@@ -1,21 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import firebase from 'firebase'
-import AddFishForm from './AddFishForm'
-import EditFishForm from './EditFishForm'
-import Login from './Login'
+
 import base, { firebaseApp } from '../base'
+import Login from './Login'
+import EditFishForm from './EditFishForm'
+import AddFishForm from './AddFishForm'
 
 class Inventory extends Component {
-  static propTypes = {
-    fishes: PropTypes.object,
-    updateFish: PropTypes.func,
-    deleteFish: PropTypes.func,
-    addFish: PropTypes.func,
-    loadSampleFishes: PropTypes.func,
-    storeId: PropTypes.string,
-  }
-
   state = {
     uid: null,
     owner: null,
@@ -97,6 +89,15 @@ class Inventory extends Component {
       </div>
     )
   }
+}
+
+Inventory.propTypes = {
+  fishes: PropTypes.object,
+  updateFish: PropTypes.func,
+  deleteFish: PropTypes.func,
+  addFish: PropTypes.func,
+  loadSampleFishes: PropTypes.func,
+  storeId: PropTypes.string,
 }
 
 export default Inventory
