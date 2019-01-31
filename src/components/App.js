@@ -36,7 +36,7 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    //* every time state is modified, update order in localStorage (keyed with the store id)
+    //* every time state is updated (in particular from updating the 'order' property in state by either adding or deleting items from the order object), update/sync order in localStorage (keyed with the specific store id)
     localStorage.setItem(
       this.props.match.params.storeId,
       JSON.stringify(this.state.order),
@@ -54,6 +54,12 @@ class App extends Component {
   //? CUSTOM FUNCTIONS THAT UPDATE STATE
   //? Any function that updates a component's state must live in the same component where state lives
 
+  //? ------ FISHES ------
+
+  loadSampleFishes = () => {
+    this.setState({ fishes: sampleFishes })
+  }
+
   addFish = fish => {
     this.setState({
       fishes: { ...this.state.fishes, [`fish${Date.now()}`]: fish },
@@ -69,9 +75,7 @@ class App extends Component {
     this.setState({ fishes: { ...this.state.fishes, [key]: null } })
   }
 
-  loadSampleFishes = () => {
-    this.setState({ fishes: sampleFishes })
-  }
+  //? ------ ORDER ------
 
   addToOrder = key => {
     // 1. take a copy of state
@@ -85,7 +89,7 @@ class App extends Component {
   removeFromOrder = key => {
     // 1. take a copy of state
     const order = { ...this.state.order }
-    //* 2. remove that item from order (here we can use 'delete' b/c it is stored in localStorage...unlike fishes which needed to be set to 'null' b/c that's what Firebase requires)
+    //* 2. remove that item from order (here we can use 'delete' b/c it is saved in localStorage...unlike fishes which needed to be set to 'null' b/c that's what Firebase requires)
     delete order[key]
     // 3. call 'setState' to update our state object
     this.setState({ order })

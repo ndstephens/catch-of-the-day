@@ -8,3 +8,5 @@ export const firebaseApp = firebase.initializeApp({
 })
 
 export default Rebase.createClass(firebaseApp.database())
+
+//* 'firebaseApp.database()' connects to the Database portion of out Firebase App (...in Inventory component we use the '.auth()' method to connect to the Authentication portion of Firebase)

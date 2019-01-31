@@ -9,6 +9,7 @@ class Order extends Component {
     const fish = this.props.fishes[key]
     const count = this.props.order[key]
     const isAvailable = fish && fish.status === 'available'
+
     const transitionOptions = {
       classNames: 'order',
       key,
@@ -21,9 +22,14 @@ class Order extends Component {
 
     if (!isAvailable) {
       return (
+        //* spreading an object into a component inserts all the key/value pairs as props...same as:
+        //* classNames="order" key={key} timeout={{ enter: 500, exit: 500 }}
         <CSSTransition {...transitionOptions}>
           <li key={key}>
             Sorry {fish ? fish.name : 'fish'} is no longer available
+            <button onClick={() => this.props.removeFromOrder(key)}>
+              &times;
+            </button>
           </li>
         </CSSTransition>
       )
@@ -42,11 +48,13 @@ class Order extends Component {
                 <span>{count}</span>
               </CSSTransition>
             </TransitionGroup>
-            lbs {fish.name} {formatPrice(count * fish.price)}{' '}
+            lbs {fish.name}
+            {'  '}
             <button onClick={() => this.props.removeFromOrder(key)}>
               &times;
             </button>
           </span>
+          {formatPrice(count * fish.price)}
         </li>
       </CSSTransition>
     )

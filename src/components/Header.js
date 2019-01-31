@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+//* destructure props parameter immediately
+
 const Header = ({ tagline }) => (
   <header className="top">
     <h1>

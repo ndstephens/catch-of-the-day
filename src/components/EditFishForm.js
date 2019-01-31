@@ -12,6 +12,10 @@ class EditFishForm extends Component {
   }
 
   render() {
+    const { name, price, status, desc, image } = this.props.fish
+    //* 'this.props.fish' is coming from App's 'state.fishes' passed through the Inventory component
+    //* 'this.handleChange' calls 'this.props.updateFish' which also comes from the App component and updates App's 'state.fishes'
+
     return (
       //? Does NOT need to be a <form> element since we aren't submitting it.  All changes are synced to state (and Firebase) on every 'change/keyup' event
       <div className="fish-edit">
@@ -19,33 +23,24 @@ class EditFishForm extends Component {
           type="text"
           name="name"
           onChange={this.handleChange}
-          value={this.props.fish.name}
+          value={name}
         />
         <input
           type="text"
           name="price"
           onChange={this.handleChange}
-          value={this.props.fish.price}
+          value={price}
         />
-        <select
-          name="status"
-          onChange={this.handleChange}
-          value={this.props.fish.status}
-        >
+        <select name="status" onChange={this.handleChange} value={status}>
           <option value="available">Fresh!</option>
           <option value="unavailable">Sold Out!</option>
         </select>
-        <textarea
-          type="text"
-          name="desc"
-          onChange={this.handleChange}
-          value={this.props.fish.desc}
-        />
+        <textarea name="desc" onChange={this.handleChange} value={desc} />
         <input
           type="text"
           name="image"
           onChange={this.handleChange}
-          value={this.props.fish.image}
+          value={image}
         />
         <button onClick={() => this.props.deleteFish(this.props.index)}>
           Remove Fish
