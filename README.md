@@ -1,7 +1,13 @@
 # Catch of the Day
 
-A React.js app I built while taking the React for Beginners course taught by Wes
-Bos. It includes real time web socket data with Firebase, and Firebase user
-authentication.
+A React app I built while taking the **React for Beginners** course taught by Wes Bos. It utilizes Firebase's real-time database and user authentication.
 
-## [Catch of the Day](https://nds-cotd.netlify.com)
+View [working demo](https://nds-cotd.netlify.com)
+
+- First provide a random name for your store
+- Login using Github, Twitter, or Facebook
+- Click `Load Sample Fishes` button to provide sample data
+
+<br>
+
+![ss1](screenshots/ss1.png)
